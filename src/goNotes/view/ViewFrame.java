@@ -16,6 +16,7 @@ public class ViewFrame extends JFrame{
 	private JTextPane textPane;
 	private TitleBar titleBar;
 	private JScrollPane textScrollPane;
+	private Resizer resizer;
 	
 	//getters & setters
 	public Note getNote() { return note; }
@@ -30,6 +31,14 @@ public class ViewFrame extends JFrame{
 	}
 	private void initComponents() {
 		//init components
+		//titleBar
+		titleBar = new TitleBar(this);
+		titleBar.setBounds(0, 0, (int)note.getBounds().getWidth(), 30);
+		this.add(titleBar);
+		//Resizer
+		this.resizer = new Resizer(this);
+		resizer.setBounds(this.getWidth()-20, this.getHeight()-20, 20, 20);
+		this.add(resizer);
 		//textPane
 		textPane = new JTextPane();
 		textPane.setContentType("text/html");
@@ -39,10 +48,6 @@ public class ViewFrame extends JFrame{
 		textScrollPane = new JScrollPane(textPane);
 		textScrollPane.setBounds(0, 30, (int)note.getBounds().getWidth(), (int)note.getBounds().getHeight()-30);
 		this.add(textScrollPane,BorderLayout.CENTER);
-		//titleBar
-		titleBar = new TitleBar(this);
-		titleBar.setBounds(0, 0, (int)note.getBounds().getWidth(), 30);
-		this.add(titleBar);
 	}
 	public void close() {
 		this.dispose();
@@ -51,9 +56,10 @@ public class ViewFrame extends JFrame{
 			System.exit(0);
 	}
 	public void rebound() {
-        setBounds(note.getBounds());
-		titleBar.setBounds(0, 0, (int)note.getBounds().getWidth(), 30);
-		textScrollPane.setBounds(0, 30, (int)note.getBounds().getWidth(), (int)note.getBounds().getHeight()-50);
+        //setBounds(note.getBounds());
+        resizer.setBounds((int)this.getBounds().getWidth()-20, (int)this.getBounds().getHeight()-20, 20, 20);
+		titleBar.setBounds(0, 0, (int)this.getBounds().getWidth(), 30);
+		textScrollPane.setBounds(0, 30, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight());
 	}
 	
 	//constructors
