@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import goNotes.controller.Controller;
 import goNotes.metier.Note;
@@ -48,6 +50,35 @@ public class ViewFrame extends JFrame{
 		textScrollPane = new JScrollPane(textPane);
 		textScrollPane.setBounds(0, 30, (int)note.getBounds().getWidth(), (int)note.getBounds().getHeight()-30);
 		this.add(textScrollPane,BorderLayout.CENTER);
+		textPane.getDocument().addDocumentListener(new DocumentListener() {
+			
+			private void save() {
+				String fullText = textPane.getText();
+				String text = fullText.substring(fullText.indexOf("<body>")+"<body>".length(), fullText.indexOf("</body>"));
+				//remove all spaces at the begging
+				while(text.charAt(0)==' '||text.charAt(0)=='\t'||text.charAt(0)=='\n'||text.charAt(0)=='\r' ) {
+					text=text.substring(1);
+				}
+				note.setHtmlText(text);
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				save();
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				save();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				save();
+				
+			}
+		});
+		
 	}
 	public void close() {
 		this.dispose();

@@ -1,13 +1,22 @@
 package goNotes.view;
 
 import java.awt.BorderLayout;
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import goNotes.controller.Controller;
 
 @SuppressWarnings("serial")
 public class TitleBar extends JPanel {
@@ -76,9 +85,11 @@ public class TitleBar extends JPanel {
 		titleField.setOpaque(false);
 		titleField.setBackground(viewFrame.getNote().getColorSet().getTitleBarColor());
 		titleField.setBorder(null);
-		
+		TitleListener tl = new TitleListener();
+		titleField.addActionListener(tl);
+		titleField.addFocusListener(tl);
 		//add
-		ExitButton add = new ExitButton(viewFrame);
+		AddButton add = new AddButton();
 		this.add(add, BorderLayout.WEST);
 	}
 	
@@ -146,6 +157,50 @@ public class TitleBar extends JPanel {
 			// TODO Auto-generated method stub
 			
 		}
+	}
+	class TitleListener implements ActionListener, FocusListener{
+		private boolean acceptable(String title) {
+			File f = new File(Controller.NOTES_FOLDER,title+".json");
+			if(!f.exists())
+				return true;
+			if(f.getAbsolutePath().equals(viewFrame.getNote().getNoteFile().getAbsolutePath()))
+				return true;
+			return false;
+		}
+		private void saveTitle() {
+			String newTitle=titleField.getText();
+			if(acceptable(newTitle)) {
+				titleLabel.setText(newTitle);
+				viewFrame.getNote().setTitle(newTitle);
+				titleField.setVisible(true);
+				remove(titleField);
+				add(titleLabel,BorderLayout.CENTER);
+				titleLabel.setVisible(true);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "this title already exists");
+				titleField.setText(viewFrame.getNote().getTitle());
+			}
+			
+		}
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			saveTitle();
+			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			saveTitle();
+			
+		}
+		
 	}
 	
 

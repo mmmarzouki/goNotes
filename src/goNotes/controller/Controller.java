@@ -5,7 +5,7 @@ import goNotes.metier.Note;
 
 public class Controller {
 	
-	private static File NOTES_FOLDER =new File("./notes");
+	public static final File NOTES_FOLDER =new File("./notes");
 	
 	public static int OPEN_FRAME =0;
 	
