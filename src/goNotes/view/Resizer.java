@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 @SuppressWarnings("serial")
@@ -16,9 +18,19 @@ public class Resizer extends JButton {
 	ViewFrame frame;
 	
 	public Resizer(ViewFrame frame) {
+		this.setToolTipText("resize");
 		this.frame=frame;
+		this.setBorderPainted(false);
 		this.setBorder(null);
+		this.setContentAreaFilled(false);
+		this.setOpaque(false);
 		this.setSize(20, 20);
+		try {
+			this.setIcon(new ImageIcon(ImageIO.read(Resizer.class.getResourceAsStream("/resources/resizerIcon.png"))));
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		this.setCursor(new Cursor(Cursor.SE_RESIZE_CURSOR));
 		this.addMouseMotionListener(new MotionListener());
 		this.addMouseListener(new ClickListener());
@@ -30,7 +42,6 @@ public class Resizer extends JButton {
 		public void mouseClicked(MouseEvent arg0) {
 			initialX=arg0.getX();
 			initialY=arg0.getY();
-			System.out.println("3asba");
 		}
 
 		@Override
@@ -71,8 +82,8 @@ public class Resizer extends JButton {
 				 if(newWidth<150)
 					 newWidth=150;
 				 //minimal Height 50
-				 if(newHeight<50)
-					 newHeight=50;
+				 if(newHeight<100)
+					 newHeight=100;
 				 
 				 frame.setBounds(new Rectangle((int)frame.getBounds().getX(), (int)frame.getBounds().getY(), newWidth, newHeight));
 				 frame.rebound();

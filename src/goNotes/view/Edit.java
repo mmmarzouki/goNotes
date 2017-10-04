@@ -8,22 +8,23 @@ import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
-public class ExitButton extends JButton {
+public class Edit extends JButton {
+	private static String expandToolTip="click to show edit menu";
+	private static String collapseToolTip="click to hide edit menu";
 	@SuppressWarnings("unused")
 	private final ViewFrame viewFrame;
-	public ExitButton(ViewFrame viewFrame) {
+	public Edit(ViewFrame viewFrame) {
+		this.setToolTipText(expandToolTip);
 		this.viewFrame=viewFrame;
-		this.setToolTipText("close and delete");
 		this.setBorderPainted(false);
 		this.setBorder(null);
 		this.setContentAreaFilled(false);
 		this.setOpaque(false);
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		try {
-			this.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/resources/exit.png"))));
+			this.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/resources/resizerIcon.png"))));
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -34,11 +35,14 @@ public class ExitButton extends JButton {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int choix = JOptionPane.showConfirmDialog(viewFrame, "you are going to delete this note, continue?", "confirmation", JOptionPane.WARNING_MESSAGE);
-				if (choix!=JOptionPane.YES_OPTION)
-					return;
-				viewFrame.getNote().delete();
-				viewFrame.close();
+				if(!viewFrame.getEditPanel().isShown()) {
+					viewFrame.showEditPanel();
+					setToolTipText(collapseToolTip);
+				}
+				else { 
+					viewFrame.hideEditPanel();
+					setToolTipText(expandToolTip);
+				}
 				
 			}
 		});

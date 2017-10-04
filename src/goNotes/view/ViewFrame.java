@@ -1,12 +1,16 @@
 package goNotes.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import javax.imageio.ImageIO;
 
 import goNotes.controller.Controller;
 import goNotes.metier.Note;
@@ -19,9 +23,11 @@ public class ViewFrame extends JFrame{
 	private TitleBar titleBar;
 	private JScrollPane textScrollPane;
 	private Resizer resizer;
+	private EditPanel editPanel;
 	
 	//getters & setters
 	public Note getNote() { return note; }
+	public EditPanel getEditPanel() { return editPanel; }
 	
 	//methods
 	private void initFrame() {
@@ -29,10 +35,21 @@ public class ViewFrame extends JFrame{
 		this.setBounds(note.getBounds());
 		this.setTitle(note.getTitle());
 		this.setLayout(null);
+		try {
+			URL url = ViewFrame.class.getResource("/resources/icon.png");
+			this.setIconImage(ImageIO.read(url));
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		this.setUndecorated(true);
 	}
 	private void initComponents() {
-		//init components
+		//EditPanel
+		editPanel = new EditPanel();
+		editPanel.setVisible(false);
+		editPanel.setBounds(0, 30, (int)note.getBounds().getWidth(), 40);
+		this.add(editPanel);
 		//titleBar
 		titleBar = new TitleBar(this);
 		titleBar.setBounds(0, 0, (int)note.getBounds().getWidth(), 30);
@@ -47,6 +64,8 @@ public class ViewFrame extends JFrame{
 		textPane.setEditable(true);
 		textPane.setBackground(note.getColorSet().getMainColor());
 		textPane.setText(note.getHtmlText());
+		textPane.setSelectedTextColor(Color.white);
+		textPane.setSelectionColor(Color.BLACK);
 		textScrollPane = new JScrollPane(textPane);
 		textScrollPane.setBounds(0, 30, (int)note.getBounds().getWidth(), (int)note.getBounds().getHeight()-30);
 		this.add(textScrollPane,BorderLayout.CENTER);
@@ -60,6 +79,8 @@ public class ViewFrame extends JFrame{
 					text=text.substring(1);
 				}
 				note.setHtmlText(text);
+				//update frame
+				repaint();
 			}
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -87,10 +108,25 @@ public class ViewFrame extends JFrame{
 			System.exit(0);
 	}
 	public void rebound() {
-        //setBounds(note.getBounds());
         resizer.setBounds((int)this.getBounds().getWidth()-20, (int)this.getBounds().getHeight()-20, 20, 20);
 		titleBar.setBounds(0, 0, (int)this.getBounds().getWidth(), 30);
-		textScrollPane.setBounds(0, 30, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight());
+		if(editPanel.isShown()) {
+			textScrollPane.setBounds(0, 70, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight()-70);
+		}
+		else {
+			textScrollPane.setBounds(0, 30, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight()-30);
+		}
+		editPanel.setBounds(0, 30, (int)this.getBounds().getWidth(), 40);
+	}
+	public void showEditPanel() {
+		editPanel.setShown(true);
+		editPanel.setVisible(true);
+		textScrollPane.setBounds(0, 70, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight()-70);
+	}
+	public void hideEditPanel() {
+		editPanel.setShown(false);
+		editPanel.setVisible(false);
+		textScrollPane.setBounds(0, 30, (int)this.getBounds().getWidth(), (int)this.getBounds().getHeight()-30);
 	}
 	
 	//constructors

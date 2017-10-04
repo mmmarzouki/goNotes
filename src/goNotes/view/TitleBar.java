@@ -1,7 +1,6 @@
 package goNotes.view;
 
 import java.awt.BorderLayout;
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -40,11 +39,9 @@ public class TitleBar extends JPanel {
 		titleLabel.setText(viewFrame.getNote().getTitle());
 		this.add(titleLabel,BorderLayout.CENTER);
 		titleLabel.addMouseListener(new MouseListener() {
-			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -80,6 +77,7 @@ public class TitleBar extends JPanel {
 		ClickListener cl = new ClickListener();
 		titleLabel.addMouseListener(cl);
 		titleLabel.addMouseMotionListener(cl);
+		titleLabel.setToolTipText("note title, double click to change");
 		//titleField
 		titleField.setText(viewFrame.getNote().getTitle());
 		titleField.setOpaque(false);
@@ -89,8 +87,16 @@ public class TitleBar extends JPanel {
 		titleField.addActionListener(tl);
 		titleField.addFocusListener(tl);
 		//add
-		AddButton add = new AddButton();
-		this.add(add, BorderLayout.WEST);
+		JPanel container = new JPanel();
+		container.setLayout(new BorderLayout());
+		container.setOpaque(false);
+			AddButton add = new AddButton();
+			container.add(add, BorderLayout.WEST);
+		//edit
+			Edit edit= new Edit(viewFrame);
+			container.add(edit, BorderLayout.EAST);
+		this.add(container, BorderLayout.WEST);
+		
 	}
 	
 	//constructors

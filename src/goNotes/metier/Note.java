@@ -43,6 +43,7 @@ public class Note {
 	    while ((line = input.readLine()) != null) {
 	    	xmlContent+=line;
 	    }
+	    input.close();
             //parse
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();

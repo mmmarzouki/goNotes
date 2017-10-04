@@ -18,6 +18,7 @@ import goNotes.metier.Note;
 public class AddButton extends JButton {
 	
 	public AddButton() {
+		this.setToolTipText("new note");
 		this.setBorderPainted(false);
 		this.setBorder(null);
 		this.setContentAreaFilled(false);
