@@ -13,6 +13,9 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class Resizer extends JButton {
 	
+	private final static int MIN_HEIGHT=150;
+	private final static int MIN_WIDTH=221;
+	
 	private int initialX;
 	private int initialY;
 	ViewFrame frame;
@@ -79,11 +82,11 @@ public class Resizer extends JButton {
 				 int newWidth = frame.getWidth() + xMoved;
 				 int newHeight = frame.getHeight() + yMoved;
 				 //width minimal 150
-				 if(newWidth<150)
-					 newWidth=150;
+				 if(newWidth<MIN_WIDTH)
+					 newWidth=MIN_WIDTH;
 				 //minimal Height 50
-				 if(newHeight<100)
-					 newHeight=100;
+				 if(newHeight<MIN_HEIGHT)
+					 newHeight=MIN_HEIGHT;
 				 
 				 frame.setBounds(new Rectangle((int)frame.getBounds().getX(), (int)frame.getBounds().getY(), newWidth, newHeight));
 				 frame.rebound();

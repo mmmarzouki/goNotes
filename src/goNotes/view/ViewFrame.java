@@ -13,6 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.imageio.ImageIO;
 
 import goNotes.controller.Controller;
+import goNotes.metier.ColorSet;
 import goNotes.metier.Note;
 
 @SuppressWarnings("serial")
@@ -30,6 +31,13 @@ public class ViewFrame extends JFrame{
 	public EditPanel getEditPanel() { return editPanel; }
 	
 	//methods
+	public void recolor(int index) {
+		ColorSet colorSet = Note.colorSets[index];
+		textPane.setBackground(colorSet.getMainColor());
+		titleBar.setBackground(colorSet.getTitleBarColor());
+		note.setColorSet(colorSet.getColorName());
+		this.repaint();
+	}
 	private void initFrame() {
 		//init frame properties
 		this.setBounds(note.getBounds());
@@ -46,7 +54,7 @@ public class ViewFrame extends JFrame{
 	}
 	private void initComponents() {
 		//EditPanel
-		editPanel = new EditPanel();
+		editPanel = new EditPanel(this);
 		editPanel.setVisible(false);
 		editPanel.setBounds(0, 30, (int)note.getBounds().getWidth(), 40);
 		this.add(editPanel);
